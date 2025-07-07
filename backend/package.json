@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.ts",
+    "build": "tsc",
+    "start": "tsc && node dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
     "prisma": "^6.11.1",
     "typescript": "^5.8.3"
@@ -20,8 +23,10 @@
     "@types/express": "^5.0.3",
     "@types/ws": "^8.18.1",
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.10",
     "websocket": "^1.0.35",
     "ws": "^8.18.3"
   }
