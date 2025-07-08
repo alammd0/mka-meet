@@ -8,20 +8,27 @@ datasource db {
 }
 
 model user {
-  id        Int       @id @default(autoincrement())
-  name      String
-  email     String    @unique
-  password  String
-  messages  Message[] @relation("UserMessages")
-  createdAt DateTime  @default(now())
-}
-
-model Message {
   id        Int      @id @default(autoincrement())
   name      String
-  email     String
-  message   String
+  email     String   @unique
+  password  String
+  rooms     Room[]   @relation("UserRooms")
+  createdAt DateTime @default(now())
+}
+
+// model Message {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   email     String
+//   message   String
+//   userId    Int
+//   user      user     @relation("UserMessages", fields: [userId], references: [id])
+//   createdAt DateTime @default(now())
+// }
+
+model Room {
+  id        Int      @id @default(autoincrement())
   userId    Int
-  user      user     @relation("UserMessages", fields: [userId], references: [id])
+  user      user     @relation("UserRooms", fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }

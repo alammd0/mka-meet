@@ -13,7 +13,7 @@ export const authenticate = (
       req.header("Authorization")?.replace("Bearer ", "") ||
       req.cookies?.token;
 
-    console.log("Token inside user - ", token);
+    // console.log("Token inside user - ", token);
 
     if (!token) {
       return res.status(401).json({

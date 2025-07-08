@@ -1,7 +1,7 @@
-import { Response, request } from "express";
 import prisma from "../lib/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Response } from "express";
 
 interface Request {
   body: {
