@@ -6,7 +6,6 @@ interface RequestWithUser extends Request {
   user: { id: number };
 }
 
-
 // 1. create room 
 export const createRoom = async (req: RequestWithUser, res: Response) => {
     try{
