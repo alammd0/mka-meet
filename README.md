@@ -4,11 +4,12 @@ MKA-Meet is a full-stack web application that provides real-time video conferenc
 
 ## ✨ Features
 
-- **Real-time Video/Audio:** High-quality video and audio streaming for seamless communication.
-- **Live Chat:** Instant messaging within each collaboration room.
-- **Collaborative Code Editor:** A shared code editor for pair programming and technical interviews.
-- **User Authentication:** Secure user registration and login system.
-- **Room-based Sessions:** Create or join unique rooms for private collaboration sessions.
+- **User Authentication:** Secure user registration and login system using JWT.
+- **Room Management:** Create, join, and view a list of collaboration rooms.
+- **Real-time Communication:** WebSocket-based communication for real-time interactions.
+- **(In Progress) Real-time Video/Audio:** High-quality video and audio streaming.
+- **(In Progress) Live Chat:** Instant messaging within each collaboration room.
+- **(In Progress) Collaborative Code Editor:** A shared code editor for pair programming.
 
 ## 🛠️ Tech Stack
 
@@ -17,16 +18,18 @@ This project is a monorepo with a separate frontend and backend.
 **Frontend:**
 - **Framework:** React with TypeScript
 - **Build Tool:** Vite
-- **Styling:** CSS (with potential for a framework like Tailwind CSS or Material-UI)
+- **Styling:** Tailwind CSS
 - **State Management:** React Context API
 - **Routing:** React Router
+- **Real-time Communication:** Socket.IO Client
+- **Notifications:** React Toastify
 
 **Backend:**
 - **Runtime:** Node.js with TypeScript
 - **Framework:** Express.js
 - **Database:** PostgreSQL with Prisma ORM
 - **Authentication:** JWT (JSON Web Tokens)
-- **Real-time Communication:** (Likely) WebSockets (e.g., Socket.IO)
+- **Real-time Communication:** Socket.IO
 
 ## 🚀 Getting Started
 
@@ -66,7 +69,7 @@ Follow these instructions to get the project up and running on your local machin
       ```bash
       npm run dev
       ```
-    The backend will be running on `http://localhost:3000`.
+    The backend will be running on `http://localhost:4000`.
 
 3.  **Setup the Frontend:**
     - In a new terminal, navigate to the frontend directory:
@@ -93,3 +96,7 @@ mka-meet/
         ├── context/
         └── page/
 ```
+
+## Project Status
+
+This project is currently under active development. The core features like user authentication and room management are functional. The real-time video/audio, chat, and collaborative editor features are in progress.
