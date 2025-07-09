@@ -9,30 +9,44 @@ interface RequestWithUser extends Request {
 // 1. create room 
 export const createRoom = async (req: RequestWithUser, res: Response) => {
     try{
+
+        console.log(req.body);
+        const {roomName, description } = req.body ;
+        console.log(roomName, description);
+        
+        if(!roomName){
+            return res.status(400).json({
+                success : false,
+                message : "Room name is required"
+            })
+        }
+
         // create room 
-        const room = await prisma.room.create({
+        const roomCreate = await prisma.room.create({
             data : {
-                userId : req.user.id
+                userId : req.user.id,
+                roomName : roomName,
+                description : description
             }
         })
 
-        if(!room){
+        if(!roomCreate){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "Room not created"
             })
         }
 
         return res.status(200).json({
-            status : true,
+            success : true,
             message : "Room created successfully",
-            data : room
+            data : roomCreate
         });
     }
     catch(err){
         console.log(err);
         return res.status(500).json({
-            status : false,
+            succuss : false,
             message : "Internal server error"
         })
     }
@@ -44,7 +58,7 @@ export const joinRoom = async (req: RequestWithUser, res: Response) => {
         const { roomId } = req.body;
         if(!roomId){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "Room id is required"
             })
         }
@@ -52,7 +66,7 @@ export const joinRoom = async (req: RequestWithUser, res: Response) => {
         const userId = req.user.id;
         if(!userId){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "User id is required"
             })
         }   
@@ -65,7 +79,7 @@ export const joinRoom = async (req: RequestWithUser, res: Response) => {
 
         if(!room){
             return res.status(400).json({
-                status : false,
+                success: false,
                 message : "Room not found"
             })
         }
@@ -78,7 +92,7 @@ export const joinRoom = async (req: RequestWithUser, res: Response) => {
 
         if(!user){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "User not found"
             })
         }
@@ -92,20 +106,52 @@ export const joinRoom = async (req: RequestWithUser, res: Response) => {
 
         if(!roomUser){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "User is already in room"
             })
         }
 
         return res.status(200).json({
-            status : true,
+            success : true,
             message : "User joined room successfully"
+            
         })
     }
     catch(error){
         console.log(error);
         return res.status(500).json({
-            status : false,
+            success : false,
+            message : `Internal server error (${error})`
+        })
+    }
+}
+
+export const getAllRooms = async (req : Request, res : Response) => {
+    try{
+        const allRooms = await prisma.room.findMany({
+            select : {
+                roomName : true,
+                description : true,
+            }
+        });
+
+        if(!allRooms){
+            return res.status(400).json({
+                success : false,
+                message : "Rooms not found"
+            })
+        }
+
+        return res.status(200).json({
+            success : true,
+            message : "Rooms found successfully",
+            data : allRooms
+        })
+    }
+    catch(error){
+        console.error(error);
+        return res.status(500).json({
+            success : false,
             message : `Internal server error (${error})`
         })
     }
@@ -118,7 +164,7 @@ export const getRoomDetail = async (req: RequestWithUser, res: Response) => {
 
         if(!roomId){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "Room id is required"
             })
         }
@@ -131,13 +177,13 @@ export const getRoomDetail = async (req: RequestWithUser, res: Response) => {
 
         if(!room){
             return res.status(400).json({
-                status : false,
+                success : false,
                 message : "Room not found"
             })
         }
 
         return res.status(200).json({
-            status : true,
+            success : true,
             message : "Room found successfully",
             data : room
         })
@@ -146,7 +192,7 @@ export const getRoomDetail = async (req: RequestWithUser, res: Response) => {
     catch(error){
         console.log(error);
         return res.status(500).json({
-            status : false,
+            success : false,
             message : `Internal server error (${error})`
         })
     }

@@ -12,13 +12,14 @@ interface Request {
 }
 
 interface RequestWithUser extends Request {
-  user: { id:number };
+  user: { id: number };
 }
 
 // 1. signup
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { name, email, password } = req.body;
+    console.log(req.body);
+    const { name, email, password} = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -38,6 +39,14 @@ export const signup = async (req: Request, res: Response) => {
         message: "User already exists",
       });
     }
+
+    // //  check password match or not
+    // if (password !== confirmPassword) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Password and confirm password do not match",
+    //   });
+    // }
 
     // hashed the password using bcrypt js
     const passwordHash = await bcrypt.hash(password, 10);
@@ -98,7 +107,7 @@ export const login = async (req: Request, res: Response) => {
         message: "Invalid credentials",
       });
     }
-
+    
     // then generate token with
     const payload = {
       id: user.id,
@@ -114,10 +123,10 @@ export const login = async (req: Request, res: Response) => {
       success: true,
       message: "User logged in successfully",
       data: {
-        token: token,
+        user: user,
       },
+      token: token,
     });
-
   } catch (err) {
     console.error(err);
     return res.status(502).json({
@@ -129,35 +138,34 @@ export const login = async (req: Request, res: Response) => {
 
 // 3. get user
 export const getuser = async (req: RequestWithUser, res: Response) => {
-    try{
-        // console.log(req.user);
-        const user = await prisma.user.findUnique({
-            where:{
-                id: req.user.id
-            }
-        })
+  try {
+    // console.log(req.user);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+    });
 
-        if(!user){
-            return res.status(400).json({
-                success: false,
-                message: "User not found",
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "User found",
-            data: user
-        })
-    }catch(err){
-        console.error(err);
-        return res.status(502).json({
-            success: false,
-            message: "Internal server error.",
-        });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
     }
-}
 
+    return res.status(200).json({
+      success: true,
+      message: "User found",
+      data: user,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(502).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+};
 
 // 4. forget password
-export const forgetPassword = async (req: Request, res: Response) => {}
+export const forgetPassword = async (req: Request, res: Response) => {};

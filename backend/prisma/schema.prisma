@@ -16,19 +16,11 @@ model user {
   createdAt DateTime @default(now())
 }
 
-// model Message {
-//   id        Int      @id @default(autoincrement())
-//   name      String
-//   email     String
-//   message   String
-//   userId    Int
-//   user      user     @relation("UserMessages", fields: [userId], references: [id])
-//   createdAt DateTime @default(now())
-// }
-
 model Room {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      user     @relation("UserRooms", fields: [userId], references: [id])
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  roomName    String
+  description String
+  userId      Int
+  user        user     @relation("UserRooms", fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
 }

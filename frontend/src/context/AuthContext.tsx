@@ -1,18 +1,17 @@
 import { createContext, useState, type ReactNode } from "react";
+import { useContext } from "react";
 
 interface User {
   id: number;
-  name: string;
+  name : string,
   email: string;
-  password: string;
   token: string;
 }
 
 const initialState: User = {
   id: 0,
-  name: "",
+  name : "",
   email: "",
-  password: "",
   token: "",
 };
 
@@ -27,6 +26,8 @@ export const AuthContext = createContext({} as AuthContextType);
 type StateProps = {
   children: ReactNode;
 };
+
+export const useAuth = () => useContext(AuthContext);
 
 const AuthContextProvider = ({ children }: StateProps) => {
   const [user, setUser] = useState<User>(initialState);
