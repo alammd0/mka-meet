@@ -130,6 +130,7 @@ export const getAllRooms = async (req : Request, res : Response) => {
     try{
         const allRooms = await prisma.room.findMany({
             select : {
+                id : true,
                 roomName : true,
                 description : true,
             }

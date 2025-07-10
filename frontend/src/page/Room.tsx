@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Room = () => {
@@ -39,8 +40,8 @@ const Room = () => {
     fetchRoom();
   }, [token]);
 
-  console.log(token);
-  console.log(rooms);
+  // console.log(token);
+  // console.log(rooms);
 
   return (
     <div className="w-9/12 mx-auto p-10">
@@ -59,12 +60,16 @@ const Room = () => {
                   key={room.id}
                 >
                   <div className="flex flex-col gap-4">
-                    <p className="text-[16px] font-semibold font-sans">{room.roomName}</p>
+                    <p className="text-[16px] font-semibold font-sans">
+                      {room.roomName}
+                    </p>
                     <p className="text-[16px] font-sans">{room.description}</p>
                   </div>
 
                   <div className="flex items-center justify-center mt-4">
-                    <button className="px-4 bg-gray-300 py-2 text-[16px] font-semibold font-serif text-center rounded-xl hover:scale-95 transition-all duration-100 cursor-pointer">Join</button>
+                    <button className="px-4 bg-gray-300 py-2 text-[16px] font-semibold font-serif text-center rounded-xl hover:scale-95 transition-all duration-100 cursor-pointer">
+                      <Link to={`/room/${room.id}`}>Join</Link>
+                    </button>
                   </div>
                 </div>
               ))}

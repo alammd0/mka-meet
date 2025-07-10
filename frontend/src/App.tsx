@@ -4,6 +4,7 @@ import { Signup } from "./page/Singup";
 import { Login } from "./page/Login";
 import Home from "./page/Home";
 import Room from "./page/Room";
+import { VideoPlayer } from "./components/VideoPlayer";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
 
           <Route path="/home" element={<Home />} />
           <Route path="/all-rooms" element={<Room />} />
+          <Route path="/room/:roomId" element={<VideoPlayer />} />
         </Routes>
       </div>
     </>

@@ -22,34 +22,61 @@ app.use(cors());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/room", roomRoutes);
 
+const userMaps: { [userId: string]: string } = {}; // userId -> socketId
+const roomMaps: { [roomId: string]: string[] } = {}; // roomId -> userId[]
+
 io.on("connection", (socket) => {
-  console.log("a user connected", socket.id);
-  
-  // join-room
-  socket.on("join-room", (data) => {
-    console.log(data);
-    socket.join(data.roomId);
-    socket.to(data.roomId).emit("join-room", data.userId);
+  console.log("User connected:", socket.id);
+
+  let currentRoomId: string | null = null;
+  let currentUserId: string | null = null;
+
+  socket.on("join-room", ({ roomId, userId }) => {
+    currentRoomId = roomId;
+    currentUserId = userId;
+
+    userMaps[userId] = socket.id;
+
+    if (!roomMaps[roomId]) roomMaps[roomId] = [];
+    const otherUsers = roomMaps[roomId].filter((id) => id !== userId);
+    socket.emit("existing-users", otherUsers);
+
+    roomMaps[roomId].push(userId);
+    socket.join(roomId);
+    socket.to(roomId).emit("user-connected", userId);
+
+    console.log(`User ${userId} joined room ${roomId}`);
   });
 
-  // offer
-  socket.on("offer", (data) => {
-    socket.to(data.roomId).emit("offer", data);
+  socket.on("offer", ({ to, offer }) => {
+    const toSocket = userMaps[to];
+    if (toSocket)
+      socket.to(toSocket).emit("offer", { from: currentUserId, offer });
   });
 
-  // answer
-  socket.on("answer", (data) => {
-    socket.to(data.roomId).emit("answer", data);
+  socket.on("answer", ({ to, answer }) => {
+    const toSocket = userMaps[to];
+    if (toSocket)
+      socket.to(toSocket).emit("answer", { from: currentUserId, answer });
   });
 
-  // icecandidate
-  socket.on("icecandidate", (data) => {
-    socket.to(data.roomId).emit("icecandidate", data);
+  socket.on("ice-candidate", ({ to, candidate }) => {
+    const toSocket = userMaps[to];
+    if (toSocket)
+      socket
+        .to(toSocket)
+        .emit("ice-candidate", { from: currentUserId, candidate });
   });
 
-  // disconnect
   socket.on("disconnect", () => {
-    console.log("a user disconnected", socket.id);
+    if (currentUserId && currentRoomId) {
+      roomMaps[currentRoomId] = roomMaps[currentRoomId].filter(
+        (id) => id !== currentUserId
+      );
+      delete userMaps[currentUserId];
+      socket.to(currentRoomId).emit("user-disconnected", currentUserId);
+      console.log(`User ${currentUserId} left room ${currentRoomId}`);
+    }
   });
 });
 
