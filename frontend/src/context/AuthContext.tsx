@@ -1,16 +1,16 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import { useContext } from "react";
 
 interface User {
   id: number;
-  name : string,
+  name: string;
   email: string;
   token: string;
 }
 
 const initialState: User = {
   id: 0,
-  name : "",
+  name: "",
   email: "",
   token: "",
 };
@@ -32,13 +32,26 @@ export const useAuth = () => useContext(AuthContext);
 const AuthContextProvider = ({ children }: StateProps) => {
   const [user, setUser] = useState<User>(initialState);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const id = localStorage.getItem("userId");
+    const name = localStorage.getItem("name");
+    const email = localStorage.getItem("email");
+
+    if (token && id && name && email) {
+      setUser({ id: Number(id), name, email, token });
+    }
+  }, []);
+
   const login = (user: User) => {
     localStorage.setItem("token", user.token);
+    localStorage.setItem("userId", String(user.id));
+    localStorage.setItem("name", user.name);
+    localStorage.setItem("email", user.email);
     setUser(user);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
     setUser(initialState);
   };
 

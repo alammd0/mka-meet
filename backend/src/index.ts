@@ -48,6 +48,10 @@ io.on("connection", (socket) => {
     console.log(`User ${userId} joined room ${roomId}`);
   });
 
+  socket.on("toggle-audio", ({roomId, userId, toggle}) => {
+    socket.to(roomId).emit("toggle-audio", {userId, toggle});
+  })
+
   socket.on("offer", ({ to, offer }) => {
     const toSocket = userMaps[to];
     if (toSocket)
