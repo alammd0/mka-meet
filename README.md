@@ -4,12 +4,14 @@ MKA-Meet is a full-stack web application that provides real-time video conferenc
 
 ## ✨ Features
 
+
 - **User Authentication:** Secure user registration and login system using JWT.
 - **Room Management:** Create, join, and view a list of collaboration rooms.
 - **Real-time Communication:** WebSocket-based communication for real-time interactions.
 - **(In Progress) Real-time Video/Audio:** High-quality video and audio streaming.
 - **(In Progress) Live Chat:** Instant messaging within each collaboration room.
 - **(In Progress) Collaborative Code Editor:** A shared code editor for pair programming.
+
 
 ## 🛠️ Tech Stack
 
